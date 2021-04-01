@@ -14,6 +14,15 @@ import {
 
 export function Home() {
     const data = useSelector(selectData);
+    const userName = useSelector(selectDisplayName);
+    const access_token = useSelector(selectAccessToken);
+    const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        dispatch(setUsersArtists(access_token));
+    }, []);
+
     return (
         <div className="min-h-screen  bg-black">
             <nav className="bg-black border-b border-gray-200">
@@ -50,7 +59,7 @@ export function Home() {
 
                                     <Switch>
                                         <Route exact path="/home">
-                                            <SpotifyExample/>
+                                            
                                         </Route>
                                     </Switch>
                                 </Router>
@@ -170,17 +179,20 @@ export function Home() {
             <div className="py-10">
                 <header>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <h1 className="text-3xl font-bold leading-tight text-gray-900">
-                            Dashboard
+                        <h1 className="text-3xl font-bold leading-tight text-green-600">
+                            Bonjour {userName}
                         </h1>
                     </div>
                 </header>
                 <main>
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="px-4 py-8 sm:px-0">
+                            <h1 className="text-2xl font-bold leading-tight text-white">
+                                Vos artistes préférés
+                            </h1><br/>
                             <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 
-                                {data.map(function(item, i) {
+                                {data.map(function(item: any, i: number) {
                                     if (i < 4) {
                                         return <li
                                             className="col-span-1 flex flex-col bg-gray-900 text-center rounded-lg shadow divide-y divide-gray-200">
@@ -189,15 +201,6 @@ export function Home() {
                                                      src={item.images[0].url}
                                                      alt=""/>
                                                 <h3 className="mt-6 text-white text-sm font-medium">{item.name}</h3>
-                                                <dl className="mt-1 flex-grow flex flex-col justify-between">
-                                                    <dt className="sr-only">Title</dt>
-                                                    <dd className="text-gray-500 text-sm">Paradigm Representative</dd>
-                                                    <dt className="sr-only">Role</dt>
-                                                    <dd className="mt-3">
-                                                    <span
-                                                        className="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">Admin</span>
-                                                    </dd>
-                                                </dl>
                                             </div>
                                         </li>
                                     }
@@ -210,27 +213,4 @@ export function Home() {
             </div>
         </div>
     )
-}
-
-export function SpotifyExample() {
-    const displayName = useSelector(selectDisplayName);
-    const product = useSelector(selectProduct);
-    const access_token = useSelector(selectAccessToken);
-    const dispatch = useDispatch();
-
-
-    useEffect(() => {
-        dispatch(setUsersArtists(access_token));
-    }, []);
-
-    return (
-        <div className={styles.column}>
-            {displayName && <div className={styles.row}>
-                Logged in as: {displayName}
-            </div>}
-            {product && <div className={styles.row}>
-                Subscription type: {product}
-            </div>}
-        </div>
-    );
 }

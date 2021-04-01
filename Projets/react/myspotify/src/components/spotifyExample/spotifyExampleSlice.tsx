@@ -4,20 +4,20 @@ import {
     setLoggedIn
 } from '../authorization/AuthorizationSlice';
 
-interface SpotifyExampleState {
+interface HomeState {
     displayName: string,
     product: string
-    data: any[];
+    topArtists: any[];
 }
 
-const initialState: SpotifyExampleState = {
-    data: [],
+const initialState: HomeState = {
+    topArtists: [],
     displayName: '',
     product: '',
 };
 
-export const spotifyExampleSlice = createSlice({
-    name: 'spotifyExample',
+export const homeSlice = createSlice({
+    name: 'Home',
     initialState,
     reducers: {
         setDisplayName: (state, action: PayloadAction<string>) => {
@@ -28,17 +28,17 @@ export const spotifyExampleSlice = createSlice({
         },
         setData: (state, action: PayloadAction<any>) => {
             action.payload.items.forEach((item: any) => {
-                state.data.push(item);
+                state.topArtists.push(item);
             })
         }
     },
 });
 
-export const { setDisplayName, setProduct, setData } = spotifyExampleSlice.actions;
+export const { setDisplayName, setProduct, setData } = homeSlice.actions;
 
-export const selectDisplayName = (state: RootState) => state.spotifyExample.displayName;
-export const selectProduct = (state: RootState) => state.spotifyExample.product;
-export const selectData = (state: RootState) => state.spotifyExample.data;
+export const selectDisplayName = (state: RootState) => state.home.displayName;
+export const selectProduct = (state: RootState) => state.home.product;
+export const selectData = (state: RootState) => state.home.topArtists;
 
 export const setUserProfileAsync = (accessToken: string): AppThunk => dispatch => {
     const myHeaders = new Headers();
@@ -84,4 +84,4 @@ export const setUsersArtists = (accessToken: string): AppThunk => dispatch => {
 
 }
 
-export default spotifyExampleSlice.reducer;
+export default homeSlice.reducer;

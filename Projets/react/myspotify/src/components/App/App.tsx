@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import {Authorization} from '../authorization/Authorization';
 import './App.css';
-import {Home, SpotifyExample} from "../spotifyExample/SpotifyExample";
+import {Home} from "../spotifyExample/SpotifyExample";
 import {useSelector} from "react-redux";
 import {selectIsLoggedIn} from "../authorization/AuthorizationSlice";
 
