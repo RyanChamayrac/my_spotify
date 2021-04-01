@@ -2,7 +2,7 @@
 import React, {Component, useEffect} from 'react';
 // @ts-ignore
 import {useDispatch, useSelector} from 'react-redux';
-import {selectDisplayName, selectProduct, setUsersArtists} from './spotifyExampleSlice';
+import {selectData, selectDisplayName, selectProduct, setUsersArtists} from './spotifyExampleSlice';
 import styles from './SpotifyExample.module.css';
 import {selectAccessToken} from "../authorization/AuthorizationSlice";
 import {
@@ -13,9 +13,10 @@ import {
 } from "react-router-dom";
 
 export function Home() {
+    const data = useSelector(selectData);
     return (
-        <div className="min-h-screen  bg-white">
-            <nav className="bg-white border-b border-gray-200">
+        <div className="min-h-screen  bg-black">
+            <nav className="bg-black border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
@@ -177,7 +178,32 @@ export function Home() {
                 <main>
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="px-4 py-8 sm:px-0">
-                            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
+                            <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+                                {data.map(function(item, i) {
+                                    if (i < 4) {
+                                        return <li
+                                            className="col-span-1 flex flex-col bg-gray-900 text-center rounded-lg shadow divide-y divide-gray-200">
+                                            <div className="flex-1 flex flex-col p-8">
+                                                <img className="w-32 h-32 flex-shrink-0 mx-auto rounded-full"
+                                                     src={item.images[0].url}
+                                                     alt=""/>
+                                                <h3 className="mt-6 text-white text-sm font-medium">{item.name}</h3>
+                                                <dl className="mt-1 flex-grow flex flex-col justify-between">
+                                                    <dt className="sr-only">Title</dt>
+                                                    <dd className="text-gray-500 text-sm">Paradigm Representative</dd>
+                                                    <dt className="sr-only">Role</dt>
+                                                    <dd className="mt-3">
+                                                    <span
+                                                        className="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">Admin</span>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </li>
+                                    }
+                                })}
+
+                            </ul>
                         </div>
                     </div>
                 </main>
