@@ -1,11 +1,15 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import authorizationReducer from '../components/authorization/AuthorizationSlice';
-import homeReducer from '../components/spotifyExample/spotifyExampleSlice'
+import userReducer from '../components/user/UserSlice'
+import topArtistsReducer from '../components/topArtists/TopArtistsSlice'
+import playlistsReducer from '../components/playlists/PlaylistsSlice';
 
 export const store = configureStore({
   reducer: {
     authorization: authorizationReducer,
-    home: homeReducer
+    user: userReducer,
+    topArtists: topArtistsReducer,
+    playlists: playlistsReducer
   },
 })
 

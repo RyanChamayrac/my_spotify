@@ -7,7 +7,7 @@ import {
     selectIsLoggedIn,
     selectTokenExpiryDate,
 } from './AuthorizationSlice';
-import { setUserProfileAsync } from '../spotifyExample/spotifyExampleSlice';
+import { setUserProfileAsync } from '../user/UserSlice';
 import { getAuthorizeHref } from '../../oauthConfig';
 import { getHashParams, removeHashParamsFromUrl } from '../../utils/hashUtils';
 
