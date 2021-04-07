@@ -8,6 +8,7 @@ import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 
 function App() {
     const isLoggedIn = useSelector(selectIsLoggedIn);
+
     console.log(isLoggedIn);
 
     return (

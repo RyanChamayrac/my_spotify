@@ -17,8 +17,15 @@ export const playlistsSlice = createSlice({
     name: 'Playlists',
     initialState,
     reducers: {
-        setData: (state, action: PayloadAction<any>) => {
+        setPlaylist: (state, action: PayloadAction<any>) => {
+            state.playlists = []
             action.payload.playlists.items.forEach((item: any) => {
+                state.playlists.push(item);
+            })
+        },
+        setUserPlaylist: (state, action: PayloadAction<any>) => {
+            state.playlists = []
+            action.payload.items.forEach((item: any) => {
                 state.playlists.push(item);
             })
         },
@@ -28,16 +35,15 @@ export const playlistsSlice = createSlice({
         setTracks: (state, action: PayloadAction<any>) => {
             state.playlistsTracks = [];
             action.payload.items.forEach((item: any) => {
-                console.log(item.track);
                 state.playlistsTracks.push(item.track);
             })
         }
     },
 });
 
-export const { setData, setTracks, setCurrentPlaylist } = playlistsSlice.actions;
+export const { setPlaylist, setUserPlaylist, setTracks, setCurrentPlaylist } = playlistsSlice.actions;
 
-export const selectData = (state: RootState) => state.playlists.playlists;
+export const selectPlaylists = (state: RootState) => state.playlists.playlists;
 export const selectPlaylistTracks = (state: RootState) => state.playlists.playlistsTracks;
 export const selectCurrentPlaylist = (state: RootState) => state.playlists.currentPlaylist;
 
@@ -50,7 +56,7 @@ export const setPlaylists = (accessToken: string): AppThunk => dispatch => {
         headers: myHeaders,
     }).then(response => response.json())
         .then((data) => {
-            dispatch(setData(data));
+            dispatch(setPlaylist(data));
         }).catch((error) => {
         console.log(error);
         if (error instanceof XMLHttpRequest) {
@@ -79,7 +85,26 @@ export const setPlaylistTracks = (accessToken: string, playlistId: string): AppT
             }
         }
     });
+}
 
+export const setUserPlaylists = (accessToken: string): AppThunk => dispatch => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', 'Bearer ' + accessToken);
+
+    fetch('https://api.spotify.com/v1/me/playlists', {
+        method: 'GET',
+        headers: myHeaders
+    }).then(response => response.json())
+        .then((data) => {
+            dispatch(setUserPlaylist(data));
+        }).catch((error) => {
+        console.log(error);
+        if (error instanceof XMLHttpRequest) {
+            if (error.status === 401) {
+
+            }
+        }
+    });
 }
 
 export default playlistsSlice.reducer;

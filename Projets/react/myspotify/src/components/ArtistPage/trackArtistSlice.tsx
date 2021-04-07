@@ -7,6 +7,7 @@ interface ArtistTrackState {
     tracks: any,
     albums: any,
     topAlbum: any[];
+    artist: any;
 }
 
 const initialState: ArtistTrackState = {
@@ -14,50 +15,54 @@ const initialState: ArtistTrackState = {
     topTracksId: '',
     tracks: '',
     albums: '',
-    topAlbum: []
+    topAlbum: [],
+    artist: {}
 };
 
 export const artistTrackSlice = createSlice({
     name: 'topTracks',
     initialState,
     reducers: {
-        setData: (state, action: PayloadAction<any>) => {
+        setTopTracks: (state, action: PayloadAction<any>) => {
+            state.topTracks = [];
             action.payload.tracks.forEach((item:any) => {
                 state.topTracks.push(item)
             })
         },
-        setAlbum: (state, action: PayloadAction<any>) => {
-            action.payload.tracks.forEach((item:any) => {
+        setAlbums: (state, action: PayloadAction<any>) => {
+            state.topAlbum = [];
+            action.payload.items.forEach((item:any) => {
                 state.topAlbum.push(item)
             })
         },
         setTopAlbum: (state, action: PayloadAction<string>) => {
             state.albums = action.payload;
         },
-        setTopTracks: (state, action: PayloadAction<string>) => {
-            state.tracks = action.payload;
-        },
         setCurrentTopTrackId: (state, action: PayloadAction<string>) => {
             state.topTracksId = action.payload;
+        },
+        setArtist: (state, action: PayloadAction<any>) => {
+            state.artist = action.payload;
         }
     },
 });
 
-export const { setData } = artistTrackSlice.actions;
+export const { setTopTracks, setArtist, setAlbums } = artistTrackSlice.actions;
 
 export const selectData = (state: RootState) => state.artistTrack.topTracks;
 export const selectAlbum = (state: RootState) => state.artistTrack.topAlbum;
+export const selectArtist = (state: RootState) => state.artistTrack.artist;
 
-export const setTracks = (accessToken: string): AppThunk => dispatch => {
+export const setTracks = (accessToken: string, artistId: string): AppThunk => dispatch => {
     const myHeaders = new Headers();
     myHeaders.append('Authorization', 'Bearer ' + accessToken);
 
-    fetch('https://api.spotify.com/v1/artists/0eDvMgVFoNV3TpwtrVCoTj/top-tracks?market=FR', {
+    fetch('https://api.spotify.com/v1/artists/' + artistId + '/top-tracks?market=FR', {
         method: 'GET',
         headers: myHeaders,
     }).then(response => response.json())
         .then((data) => {
-            dispatch(setData(data));
+            dispatch(setTopTracks(data));
         }).catch((error) => {
         console.log(error);
         if (error instanceof XMLHttpRequest) {
@@ -67,17 +72,16 @@ export const setTracks = (accessToken: string): AppThunk => dispatch => {
     });
 };
 
-export const setAlbumName = (accessToken: string): AppThunk => dispatch => {
+export const setAlbumName = (accessToken: string, artistId: string): AppThunk => dispatch => {
     const myHeaders = new Headers();
     myHeaders.append('Authorization', 'Bearer ' + accessToken);
 
-    fetch('https://api.spotify.com/v1/artists/0eDvMgVFoNV3TpwtrVCoTj/albums', {
+    fetch('https://api.spotify.com/v1/artists/' + artistId + '/albums', {
         method: 'GET',
         headers: myHeaders,
     }).then(response => response.json())
         .then((data) => {
-            console.log("--->", data);
-            //dispatch(setData(data));
+            dispatch(setAlbums(data));
         }).catch((error) => {
         console.log(error);
         if (error instanceof XMLHttpRequest) {

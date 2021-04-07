@@ -5,18 +5,23 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectData, selectReadMore, setUsersArtists} from './TopArtistsSlice';
 import {selectAccessToken} from "../authorization/AuthorizationSlice";
 import {selectUserName} from "../user/UserSlice";
+import {setArtist} from "../ArtistPage/trackArtistSlice";
+import {useHistory} from "react-router-dom";
+import {selectPlaylists, setCurrentPlaylist, setPlaylists, setUserPlaylists} from "../playlists/PlaylistsSlice";
 
 export function TopArtists(props: any) {
-    const data = useSelector(selectData);
+    let history = useHistory();
     const access_token = useSelector(selectAccessToken);
     const dispatch = useDispatch();
     const userName = useSelector(selectUserName);
     const [readMore, setReadMore] = useState(false);
     const linkName = readMore ? 'Voir moins' : 'Voir plus'
-
     useEffect(() => {
+        dispatch(setUserPlaylists(access_token));
         dispatch(setUsersArtists(access_token));
     }, []);
+    const playlists = useSelector(selectPlaylists);
+    const data = useSelector(selectData);
 
     return (
         <main>
@@ -42,7 +47,14 @@ export function TopArtists(props: any) {
                                         <img className="w-32 h-32 flex-shrink-0 mx-auto rounded-full"
                                              src={item.images[0].url}
                                              alt=""/>
-                                        <h3 className="mt-6 text-white text-sm font-medium">{item.name}</h3>
+                                        <button className="mt-6 text-green-600 hover:text-green-400 hover:underline text-sm font-medium"
+                                                onClick={() => {
+                                                    dispatch(setArtist({image: item.images[0].url, name: item.name}))
+                                                    history.push('/artist/' + item.id);
+                                                    /*dispatch(setPlaylistTracks(access_token, item.id));
+                                                    setCurrentPlaylistId({id:item.id, image:item.images[0].url, name:item.name});*/
+                                                }}>
+                                            {item.name}</button>
                                     </div>
                                 </li>
                             }
@@ -65,10 +77,44 @@ export function TopArtists(props: any) {
                     }}><h2>{linkName}</h2></button>
                 </div>
 
-                <div className="App">
 
+                <h1 className="text-2xl font-bold leading-tight text-white">
+                    Vos playlists
+                </h1><br/>
+                <div className="bg-black">
+                    <div className="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8 sm:py-4">
+                        <div className="space-y-12">
+                            <ul className="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
+                                {playlists.map(function (item: any) {
+                                    return <li>
+                                        <div className="space-y-4">
+                                            <div className="aspect-w-3 aspect-h-2">
+                                                <img className="object-cover shadow-lg rounded-lg"
+                                                     src={item.images[0].url}
+                                                     alt=""/>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <button
+                                                    className="read-more-link font-bold text-green-600 hover:text-green-400 hover:underline"
+                                                    onClick={() => {
+                                                        dispatch(setCurrentPlaylist({image: item.images[0].url, name: item.name}))
+                                                        history.push('/playlist/' + item.id);
+                                                        /*dispatch(setPlaylistTracks(access_token, item.id));
+                                                        setCurrentPlaylistId({id:item.id, image:item.images[0].url, name:item.name});*/
+                                                    }}>
+                                                    <h3>{item.name}</h3>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                })}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
+
     )
 }

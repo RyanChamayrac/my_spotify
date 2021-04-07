@@ -2,7 +2,7 @@
 import React, {Component, useEffect, useState} from 'react';
 // @ts-ignore
 import {useDispatch, useSelector} from 'react-redux';
-import {setPlaylists, selectData, setCurrentPlaylist, selectPlaylistTracks} from "./PlaylistsSlice";
+import {setPlaylists, selectPlaylists, setCurrentPlaylist, selectPlaylistTracks} from "./PlaylistsSlice";
 import {selectAccessToken} from "../authorization/AuthorizationSlice";
 import {BrowserRouter as Router, Link, Route, Switch, Redirect} from "react-router-dom";
 import { useHistory } from 'react-router-dom';
@@ -17,7 +17,7 @@ export function Playlists() {
     useEffect(() => {
         dispatch(setPlaylists(access_token));
     }, []);
-    const playlists = useSelector(selectData);
+    const playlists = useSelector(selectPlaylists);
     /*const [displayOne, setDisplayOne] = useState(false);
     const [currentPlaylist, setCurrentPlaylistId] = useState<{id: string; image:string; name:string}>({id: '', image: '', name: ''});*/
 

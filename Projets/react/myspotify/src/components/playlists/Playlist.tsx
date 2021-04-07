@@ -98,7 +98,6 @@ export function Playlist() {
 }
 
 var getTimeString = function(timeInMs: any) {
-    console.log(timeInMs);
     let delim = ":";
     let minutes: string | number = Math.floor(timeInMs / (1000 * 60) % 60);
     let seconds: string | number = Math.floor(timeInMs / 1000 % 60);

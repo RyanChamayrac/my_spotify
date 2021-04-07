@@ -6,6 +6,7 @@ import {selectUserImage, selectUserName} from "../user/UserSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {Playlists} from "../playlists/Playlists";
 import Playlist from "../playlists/Playlist";
+import {TrackArtist} from "../ArtistPage/trackArtist";
 import {setLoggedIn} from "../authorization/AuthorizationSlice";
 
 function Home() {
@@ -38,7 +39,11 @@ function Home() {
                                             <span className="sr-only">Open user menu</span>
                                             <img className="h-8 w-8 rounded-full"
                                                  src={userImage}
-                                                 alt=""/>
+                                                 alt=""
+                                                 onClick={() => {
+                                                     dispatch(setLoggedIn(false));
+                                                 }}
+                                            />
                                         </button>
                                     </div>
 
@@ -138,6 +143,9 @@ function Home() {
                         </Route>
                         <Route exact path="/playlist/:id">
                             <Playlist/>
+                        </Route>
+                        <Route exact path="/artist/:id">
+                            <TrackArtist/>
                         </Route>
                     </Switch>
                 </div>
