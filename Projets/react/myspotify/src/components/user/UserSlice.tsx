@@ -47,7 +47,6 @@ export const setUserProfileAsync = (accessToken: string): AppThunk => dispatch =
         headers: myHeaders,
     }).then(response => response.json())
         .then((data) => {
-            console.log(data);
             dispatch(setUserName(data.display_name));
             dispatch(setProduct(data.product));
             dispatch(setUserImage(data.images[0].url));

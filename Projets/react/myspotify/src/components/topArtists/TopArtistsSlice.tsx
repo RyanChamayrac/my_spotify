@@ -19,6 +19,7 @@ export const homeSlice = createSlice({
     initialState,
     reducers: {
         setData: (state, action: PayloadAction<any>) => {
+            state.topArtists = [];
             action.payload.items.forEach((item: any) => {
                 state.topArtists.push(item);
             })
@@ -43,7 +44,6 @@ export const setUsersArtists = (accessToken: string): AppThunk => dispatch => {
         headers: myHeaders,
     }).then(response => response.json())
         .then((data) => {
-            console.log(data);
             dispatch(setData(data));
         }).catch((error) => {
         console.log(error);
